@@ -14,15 +14,15 @@ class Retriever
   FORMAT = 'json'
   DEFAULT_TARGET = 'my-tweets.json'
 
-  def initialize(target='my-tweets.json')
+  def initialize(target=DEFAULT_TARGET)
     @target_name = target
   end
 
   def retrieve
     page = 0
 
-    if File.exist?(@target_name || DEFAULT_TARGET)
-      results = JSON.parse(File.read(@target_name || DEFAULT_TARGET))
+    if File.exist?(@target_name)
+      results = JSON.parse(File.read(@target_name))
       @since_id = results.first['id']
       STDERR.puts("Found #{results.size} tweets already retrieved. Updating...")
     else
