@@ -23,7 +23,7 @@ class Retriever
 
     if File.exist?(@target_name)
       results = JSON.parse(File.read(@target_name))
-      @since_id = results.first['id']
+      @since_id = results.last['id']
       STDERR.puts("Found #{results.size} tweets already retrieved. Updating...")
     else
       results = []
@@ -37,6 +37,7 @@ class Retriever
 
       if new_tweets = fetch(page)
         results += new_tweets
+        results  = results.sort_by { |tweet| tweet['id'] }
         write results.to_json
         STDERR.puts('done.')
       else
@@ -66,7 +67,7 @@ class Retriever
   end
   
   def write(text)
-    File.open(@target_name || DEFAULT_TARGET, 'w+') do |f|
+    File.open(@target_name, 'w+') do |f|
       f.puts(text)
     end
   end
