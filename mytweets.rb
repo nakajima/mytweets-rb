@@ -24,24 +24,24 @@ class Retriever
     if File.exist?(@target_name)
       results = JSON.parse(File.read(@target_name))
       @since_id = results.last['id']
-      STDERR.puts("Found #{results.size} tweets already retrieved. Updating...")
+      $stderr.puts("Found #{results.size} tweets already retrieved. Updating...")
     else
       results = []
     end
 
     loop do
       page += 1
-      
-      STDERR.print("Fetching page #{page}... ")
-      STDERR.flush
+
+      $stderr.print("Fetching page #{page}... ")
+      $stderr.flush
 
       if new_tweets = fetch(page)
         results += new_tweets
         results  = results.sort_by { |tweet| tweet['id'] }
         write results.to_json
-        STDERR.puts('done.')
+        $stderr.puts('done.')
       else
-        STDERR.puts('No more tweets.')
+        $stderr.puts('No more tweets.')
         break results.to_json
       end
     end
@@ -57,7 +57,7 @@ class Retriever
     begin
       body = open(uri, :http_basic_authentication => [USERNAME, PASSWORD]).read
     rescue OpenURI::HTTPError => e
-      STDERR.puts("ERROR: #{e.message}", "Trying again in 1 minute.")
+      $stderr.puts("ERROR: #{e.message}", "Trying again in 1 minute.")
       sleep 60
       retry
     end
@@ -65,12 +65,22 @@ class Retriever
     tweets = JSON.parse(body)
     tweets.empty? ? false : tweets
   end
-  
+
   def write(text)
     File.open(@target_name, 'w+') do |f|
       f.puts(text)
     end
   end
+end
+
+if ARGV.delete('--count') || ARGV.delete('-c')
+  if ! File.exist?(Retriever::DEFAULT_TARGET)
+    Retriever.new(*ARGV).retrieve
+  end
+
+  tweets = JSON.parse(File.read(Retriever::DEFAULT_TARGET))
+  puts tweets.size
+  exit 0
 end
 
 if ARGV.delete('--verbose') || ARGV.delete('-v')
