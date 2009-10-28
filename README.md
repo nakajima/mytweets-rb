@@ -29,7 +29,7 @@ or:
     $ irb
     >> require 'searcher'
     => true
-    >> Tweet.search /hello/i
+    >> Tweetion.search /hello/i
 
 ### See who you mention
 
@@ -40,5 +40,13 @@ You can limit:
     $ ruby mentions.rb --limit 10
 
 **Warning: You may be surprised at you talk to the most.**
+
+### See who you reply to
+
+    $ ruby replies.rb
+
+Again, you can limit:
+
+    $ ruby replies.rb --limit 10
 
 Inspired by [github.com/simonw/mytweets](http://github.com/simonw/mytweets)
