@@ -2,7 +2,7 @@ require 'json'
 
 $TWEETS = JSON.parse(File.read('my-tweets.json'))
 
-class Tweet
+class Tweetion
   def self.search(term, options={})
     $TWEETS.select do |tweet|
       if term.is_a?(Regexp)
@@ -15,5 +15,5 @@ class Tweet
 end
 
 if term = ARGV.pop
-  puts Tweet.search(term).map { |tweet| "- #{tweet['text']}" }
+  puts Tweetion.search(term).map { |tweet| "- #{tweet['text']}" }
 end
