@@ -18,4 +18,27 @@ You can also dump all of your tweets as JSON if you want:
 
     $ ruby mytweets.rb --verbose
 
+## Extras
+
+### Search your Tweetion (all your tweets)
+
+    $ ruby searcher.rb something
+
+or:
+
+    $ irb
+    >> require 'searcher'
+    => true
+    >> Tweet.search /hello/i
+
+### See who you mention
+
+    $ ruby mentions.rb
+
+You can limit:
+
+    $ ruby mentions.rb --limit 10
+
+**Warning: You may be surprised at you talk to the most.**
+
 Inspired by [github.com/simonw/mytweets](http://github.com/simonw/mytweets)
