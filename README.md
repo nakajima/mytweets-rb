@@ -10,15 +10,13 @@ credentials. Then run the script:
 
     $ ruby mytweets.rb
 
-You can pass a file name if you want:
-
-    $ ruby mytweets.rb other-tweets.json
-
-You can also dump all of your tweets as JSON if you want:
+You can also dump all of your tweets to the terminal as JSON if you want:
 
     $ ruby mytweets.rb --verbose
 
 ## Extras
+
+Make sure you've already run `ruby mytweets.rb` before you attempt these.
 
 ### Search your Tweetion (all your tweets)
 

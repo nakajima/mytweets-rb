@@ -12,17 +12,13 @@ end
 class Retriever
   APIURL = 'http://twitter.com/statuses/user_timeline/'
   FORMAT = 'json'
-  DEFAULT_TARGET = 'my-tweets.json'
-
-  def initialize(target=DEFAULT_TARGET)
-    @target_name = target
-  end
+  TARGET = 'my-tweets.json'
 
   def retrieve
     page = 0
 
-    if File.exist?(@target_name)
-      results = JSON.parse(File.read(@target_name))
+    if File.exist?(TARGET)
+      results = JSON.parse(File.read(TARGET))
       @since_id = results.last['id']
       $stderr.puts("Found #{results.size} tweets already retrieved. Updating...")
     else
@@ -67,24 +63,24 @@ class Retriever
   end
 
   def write(text)
-    File.open(@target_name, 'w+') do |f|
+    File.open(TARGET, 'w+') do |f|
       f.puts(text)
     end
   end
 end
 
 if ARGV.delete('--count') || ARGV.delete('-c')
-  if ! File.exist?(Retriever::DEFAULT_TARGET)
-    Retriever.new(*ARGV).retrieve
+  if ! File.exist?(Retriever::TARGET)
+    Retriever.new.retrieve
   end
 
-  tweets = JSON.parse(File.read(Retriever::DEFAULT_TARGET))
+  tweets = JSON.parse(File.read(Retriever::TARGET))
   puts tweets.size
   exit 0
 end
 
 if ARGV.delete('--verbose') || ARGV.delete('-v')
-  puts Retriever.new(*ARGV).retrieve
+  puts Retriever.new.retrieve
 else
-  Retriever.new(*ARGV).retrieve
+  Retriever.new.retrieve
 end
