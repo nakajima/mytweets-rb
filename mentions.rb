@@ -15,11 +15,14 @@ class Tweetion
 end
 
 if __FILE__ == $0
-  mentions = Tweetion.mentions.sort_by { |key,val| -val }
-  mentions.map! { |key,val| "#{key}: #{val}" }
+  mentions = Tweetion.mentions
+  display_mentions = mentions \
+    .sort_by { |key,val| -val } \
+    .map { |key,val| "#{key}: #{val}" }
   if limit = ARGV.delete('--limit') || ARGV.delete('-l')
-    puts mentions[0..ARGV.last.to_i]
+    puts display_mentions[0..ARGV.last.to_i]
   else
-    puts mentions
+    puts display_mentions
   end
+  puts "You've made #{mentions.values.inject(0) { |sum, i| sum + i.to_i }} mentions."
 end
