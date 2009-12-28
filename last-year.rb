@@ -8,8 +8,8 @@ ONE_YEAR_AGO = 1.year.ago.strftime('%m/%d/%Y')
 class Tweetion
   def self.last_year
     $TWEETS.inject([]) do |res, tweet|
-      created_at = DateTime.parse(tweet['created_at'])
-      res << tweet if ONE_YEAR_AGO == created_at.strftime('%m/%d/%Y')
+      created_at = DateTime.parse(tweet['created_at']).strftime('%m/%d/%Y')
+      res << tweet if ONE_YEAR_AGO == created_at
       res
     end
   end
