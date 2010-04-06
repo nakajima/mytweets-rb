@@ -13,6 +13,10 @@ end
 
 if __FILE__ == $0
   tweet = Tweetion.random
-  puts tweet['text']
-  puts "http://twitter.com/#{tweet['user']['screen_name']}/statuses/#{tweet['id']}"
+  if ARGV.include?('--open')
+    system("open http://twitter.com/#{tweet['user']['screen_name']}/statuses/#{tweet['id']}")
+  else
+    puts tweet['text']
+    puts "http://twitter.com/#{tweet['user']['screen_name']}/statuses/#{tweet['id']}"
+  end
 end
