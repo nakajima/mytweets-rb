@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'json'
 
 $TWEETS = JSON.parse(File.read('my-tweets.json'))

@@ -1,11 +1,13 @@
+require 'rubygems'
 require 'open-uri'
 require 'json'
+require 'oauth'
 
 begin
   require 'config.rb'
-  raise ArgumentError unless defined?(USERNAME) and defined?(PASSWORD)
+  raise ArgumentError unless defined?(CONSUMER_KEY) and defined?(CONSUMER_SECRET) and defined?(TOKEN) and defined?(TOKEN_SECRET) and defined?(USERNAME)
 rescue LoadError, ArgumentError
-  puts "You must define USERNAME and PASSWORD constants in config.rb"
+  puts "You must define CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET, and USERNAME config.rb"
   exit 1
 end
 
@@ -51,7 +53,7 @@ class Retriever
     uri += "&since_id=#{@since_id}" if @since_id
 
     begin
-      body = open(uri, :http_basic_authentication => [USERNAME, PASSWORD]).read
+      body = request(uri)
     rescue OpenURI::HTTPError => e
       $stderr.puts("ERROR: #{e.message}", "Trying again in 1 minute.")
       sleep 60
@@ -60,6 +62,30 @@ class Retriever
 
     tweets = JSON.parse(body)
     tweets.empty? ? false : tweets
+  end
+
+  def request(uri)
+    # Exchange your oauth_token and oauth_token_secret for an AccessToken instance.
+    consumer = OAuth::Consumer.new(CONSUMER_KEY, CONSUMER_SECRET, {
+      :site => "http://api.twitter.com",
+      :scheme => :header
+    })
+
+    # now create the access token object from passed values
+    token_hash = {
+      :oauth_token => TOKEN,
+      :oauth_token_secret => TOKEN_SECRET
+    }
+
+    access_token = OAuth::AccessToken.from_hash(consumer, token_hash)
+    response = access_token.request(:get, uri)
+    if response.code != "200"
+      puts "Error. Response code was #{response.code}. Retrying..."
+      sleep 5
+      request(uri)
+    else
+      response.body
+    end
   end
 
   def write(text)

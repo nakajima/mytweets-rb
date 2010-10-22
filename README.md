@@ -2,11 +2,25 @@
 
 Fetches all of your tweets from Twitter, saving them to a json file.
 
+## Setup (or: oauth sucks)
+
+* Create a file in this directory named `config.rb`
+* Create an app for my-tweets at twitter.com/apps (lame, right?)
+* In config.rb:
+  * Set `CONSUMER_KEY` to your consumer key
+  * Set `CONSUMER_SECRET` to your consumer secret
+* Find your app id (http://twitter.com/oauth_clients/details/THIS-IS-YOUR-APPID)
+* Visit `http://dev.twitter.com/apps/YOUR-APP-ID/my_token`
+* In config.rb:
+  * Set `TOKEN` to your access token
+  * Set `TOKEN_SECRET` to your access token secret
+* Finally, set `USERNAME` in config.rb to whatever username you want to get tweets for.
+
+Sucks, right?
+
 ## Usage
 
-Create a file named `config.rb` in the same directory as `mytweets.rb` that
-defines `USERNAME` and `PASSWORD` constants that contain your Twitter
-credentials. Then run the script:
+Then run the script:
 
     $ ruby mytweets.rb
 
